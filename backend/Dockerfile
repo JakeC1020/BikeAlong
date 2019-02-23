@@ -6,4 +6,4 @@ ENV UWSGI_INI /app/uwsgi.ini
 COPY ./app/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-EXPOSE 8080 443
+EXPOSE 80 443 8080
