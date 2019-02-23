@@ -12,7 +12,7 @@ class Geolocation extends Component {
     };
   }
 
-  componentDidMount() {
+  sendCoords() {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         this.setState({
@@ -24,6 +24,14 @@ class Geolocation extends Component {
       (error) => this.setState({ error: error.message }),
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
     );
+  }
+
+  componentDidMount() {
+    this.timer = setInterval(()=> this.getItems(), 1000); 
+  }
+
+  componentWillUnmount() {
+    this.timer = null; // here...
   }
 
   render() {
