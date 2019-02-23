@@ -5,8 +5,8 @@ import {
   withGoogleMap, 
   GoogleMap, 
   Marker,
-  BicyclingLayer,
 } from 'react-google-maps';
+import axios from 'axios';
 
 import { googleMapsKey } from '../secrets.js';
 
@@ -16,12 +16,6 @@ const boulderCoords = {
   lat: 40.010193,
   lng: -105.242466,
 }
-
-const Loading = () => (
-  <>
-    LOADING...
-  </>
-);
 
 const mapStyle = {
   width: '100%',
@@ -134,8 +128,35 @@ const defaultOptions = {
 
 class Map extends React.Component {
 
+  state = {
+    currentLoc: boulderCoords,
+  };
+
+  componentDidMount() {
+    console.log('mount');
+    axios.get('/route/status')
+    .then(res => {
+      console.log('test')
+      console.log(res);
+    })
+    .catch(err => {
+      console.log('test2')
+      console.log(err);
+    });
+
+    //setInterval(() => {
+    //}, 1000);
+  }
+
   mapClick(e) {
     console.log(e);
+    axios.get('/route/status')
+    .then(res => {
+      console.log(res);
+    })
+    .catch(err => {
+      console.log(err);
+    });
   }
 
   render() {
@@ -144,8 +165,9 @@ class Map extends React.Component {
         defaultCenter={boulderCoords}
         defaultOptions={defaultOptions}
         defaultZoom={18}
+        key={googleMapsKey}
         onClick={e => this.mapClick(e)}
-        style={{width: '100%', height: '100%'}}
+        style={mapStyle}
       >
         <Marker position={boulderCoords} />
       </GoogleMap>
