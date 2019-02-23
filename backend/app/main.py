@@ -4,7 +4,7 @@ from uuid import uuid4
 from flask import Flask, request, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, DateTime, String, Float
+from sqlalchemy import desc, Column, DateTime, String, Float
 
 
 class DevConfig(object):
@@ -26,6 +26,7 @@ class RouteStatus(Base):
     uuid = Column('uuid', String(36), primary_key=True)
     latitude = Column('latitude', Float)
     longitude = Column('longitude', Float)
+    timestamp = Column('timestamp', DateTime, default=datetime.datetime.utcnow)
 
 
 db_engine = db.get_engine()
@@ -57,10 +58,11 @@ def status_post():
 def status_get():
     dbsession = db.session()
 
-    status = dbsession.query(RouteStatus).first()
+    status = dbsession.query(RouteStatus).order_by(desc(RouteStatus.timestamp)).first()
     response = {
         "latitude": status.latitude,
-        "longitude": status.longitude
+        "longitude": status.longitude,
+        "timestamp": status.timestamp
     }
 
     # Logic to get most recent status here
