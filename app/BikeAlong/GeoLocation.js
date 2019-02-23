@@ -27,7 +27,7 @@ class Geolocation extends Component {
   }
 
   componentDidMount() {
-    this.timer = setInterval(()=> this.getItems(), 1000); 
+    this.timer = setInterval(()=> this.sendCoords(), 1000); 
   }
 
   componentWillUnmount() {
