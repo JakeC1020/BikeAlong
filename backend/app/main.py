@@ -32,6 +32,11 @@ db_engine = db.get_engine()
 Base.metadata.create_all(db_engine)
 
 
+@app.route('/', methods=['GET'])
+def index():
+    return "I'm working!"
+
+
 @app.route('/route/status', methods=['POST'])
 def status_post():
     dbsession = db.session()
