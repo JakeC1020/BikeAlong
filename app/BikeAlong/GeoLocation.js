@@ -6,8 +6,6 @@ class Geolocation extends Component {
     super(props);
 
     this.state = {
-      latitude: null,
-      longitude: null,
       error: null,
     };
   }
@@ -16,28 +14,27 @@ class Geolocation extends Component {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         this.setState({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
           error: null,
         });
-        fetch('https://SERVERADDRESS/route/status', {
+        this.props.updateCoords(position.coords.latitude, position.coords.longitude);
+        console.log('fetching');
+        fetch('http://ASDF/route/status', {
           method: 'POST',
           headers: {
-            Accept: 'application/json',
+            //Accept: 'application/json',
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            latitude: this.state.latitude,
-            longitude: this.state.longitude,
+            latitude: this.props.latitude,
+            longitude: this.props.longitude,
+            isPanicking: this.props.isPanicking,
           }),
         })
         .then(response => {
-          console.log("Response:")
-          console.log(response);
+          console.log("Response:" + response);
         })
         .catch(error => {
-          console.log("Error:")
-          console.log(error);
+          console.log("Error:" + error);
         });
       },
       (error) => this.setState({ error: error.message }),
@@ -56,8 +53,8 @@ class Geolocation extends Component {
   render() {
     return (
       <View style={{ flexGrow: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Latitude: {this.state.latitude}</Text>
-        <Text>Longitude: {this.state.longitude}</Text>
+        <Text>Latitude: {this.props.latitude}</Text>
+        <Text>Longitude: {this.props.longitude}</Text>
       </View>
     );
   }

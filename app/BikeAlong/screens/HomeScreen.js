@@ -6,18 +6,41 @@ import {
   View,
 } from 'react-native';
 import Geolocation from '../GeoLocation';
+import PanicButton from '../PanicButton';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
 
+  state = {
+    latitude: null,
+    longitude: null,
+    isPanicking: false,
+    error: null,
+  };
+
+
+  updateCoords(lat, lon) {
+    this.setState({
+      latitude: lat,
+      longitude: lon,
+    });
+  }
+
+  updatePanicking(panic) {
+    this.setState({
+      isPanicking: panic,
+    });
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
           <View style={styles.getStartedContainer}>
-            <Geolocation></Geolocation>
+            <Geolocation latitude={this.state.latitude} longitude={this.state.longitude} isPanicking={this.state.isPanicking} updateCoords={(lat, lon) => this.updateCoords(lat, lon)}></Geolocation>
+            <PanicButton isPanicking={this.state.isPanicking} updatePanicking={(panic) => this.updatePanicking(panic)}></PanicButton>
           </View>
         </ScrollView>
       </View>
