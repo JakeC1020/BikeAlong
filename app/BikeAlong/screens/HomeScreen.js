@@ -11,6 +11,7 @@ import {
 import { WebBrowser } from 'expo';
 
 import { MonoText } from '../components/StyledText';
+import Geolocation from '../GeoLocation';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -44,6 +45,8 @@ export default class HomeScreen extends React.Component {
             <Text style={styles.getStartedText}>
               Change this text and your app will automatically reload.
             </Text>
+
+            <Geolocation></Geolocation>
           </View>
 
           <View style={styles.helpContainer}>
