@@ -3,6 +3,7 @@ import './App.css';
 
 import Map from './components/Map.js';
 import UIOverlay from './components/UIOverlay.js';
+import ChildView from './components/ChildView';
 
 class App extends Component {
   render() {
@@ -10,6 +11,7 @@ class App extends Component {
       <div className="App" style={{height: '100%'}}>
         <Map />
         <UIOverlay />
+        <ChildView></ChildView>
       </div>
     );
   }

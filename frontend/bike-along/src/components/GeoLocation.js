@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
 
 class Geolocation extends Component {
   constructor(props) {
@@ -52,10 +51,10 @@ class Geolocation extends Component {
 
   render() {
     return (
-      <View style={{ flexGrow: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <>
         <Text>Latitude: {this.props.latitude}</Text>
         <Text>Longitude: {this.props.longitude}</Text>
-      </View>
+      </>
     );
   }
 }
