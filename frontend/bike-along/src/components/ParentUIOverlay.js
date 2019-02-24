@@ -13,9 +13,9 @@ const TopBar = styled.div`
   width: 100%;
   height: 110px;
   background: ${props => {
-    if (props.isPanicking) return '#B45152';
-    else if (props.isOOB) return '#F6F7EB';
-    else return '#424242';
+    if (props.isPanicking) return '#F3A4A0';
+    else if (props.isOOB) return '#F7C24B';
+    else return '#7ED1D3';
   }};
   opacity: 0.98;
   &:before {

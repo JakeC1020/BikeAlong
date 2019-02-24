@@ -13,9 +13,9 @@ const TopBar = styled.div`
   width: 100%;
   height: 110px;
   background: ${props => {
-    if (props.isPanicking) return '#B45152';
-    else if (props.isOOB) return '#F6F7EB';
-    else return '#424242';
+    if (props.isPanicking) return '#F3A4A0';
+    else if (props.isOOB) return '#F7C24B';
+    else return '#7ED1D3';
   }};
   opacity: 0.98;
   &:before {
@@ -66,7 +66,7 @@ const StartRouteButton = styled.button`
   border-radius: 6px;
   border: 1px solid ${props => props.isOOB ? '#262F3D' : 'rgba(255, 255, 255, 0.85)'};
   cursor: pointer;
-  color: ${props => props.isOOB ? '#262F3D' : 'rgba(255, 255, 255, 0.85)'};
+  color: ${props => props.isOOB || props.isPanicking ? '#262F3D' : 'rgba(255, 255, 255, 0.85)'};
   transition: 0.15s ease;
 
   &:before {
@@ -105,7 +105,7 @@ const CenterText = styled.div`
   text-align: center;
   font-size: 32px;
   font-weight: 900;
-  color: ${props => props.isOOB ? '#262F3D' : 'rgba(255, 255, 255, 0.85)'};
+  color: ${props => props.isOOB || props.isPanicking ? '#262F3D' : 'rgba(255, 255, 255, 0.85)'};
   padding-top: 36px;
 `;
 
