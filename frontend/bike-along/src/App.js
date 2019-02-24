@@ -4,25 +4,47 @@ import './App.css';
 import Map from './components/Map.js';
 import UIOverlay from './components/UIOverlay.js';
 import ChildView from './components/ChildView';
+import { googleMapsKey } from './secrets';
+import axios from 'axios';
 
 class App extends Component {
 
   state = {
     isCreating: false,
     waypoints: [],
+    directions: null,
   }
 
   toggleIsCreating() {
+    console.log(this.state.directions.routes[0].overview_path);
+    const path = this.state.directions.routes[0].overview_path;
+    const waypoints = path.map(point => ({lat: point.lat(), lng: point.lng()}));
+    console.log('waypoints; ', waypoints);
+    if (this.state.directions) {
+      //fetch
+      axios.post('/routes', {
+        waypoints,
+      });
+    }
     this.setState({
       isCreating: !this.state.isCreating,
     });
   }
 
   pushWaypoint(waypoint) {
-    console.log(waypoint);
     this.setState({
-      waypoints: new Array(this.state.waypoints.push(waypoint)),
+      waypoints: this.state.waypoints.concat(waypoint),
     });
+  }
+
+  setDirections(directions) {
+    this.setState({
+      directions,
+    });
+  }
+
+  putRoute() {
+    alert('test');
   }
 
   render() {
@@ -39,11 +61,14 @@ class App extends Component {
           <Map 
             pushWaypoint={waypoint => this.pushWaypoint(waypoint)} 
             waypoints={this.state.waypoints}
+            directions={this.state.directions}
+            setDirections={directions => this.setDirections(directions)}
           />
           <UIOverlay 
             isCreating={this.state.isCreating} 
             waypoints={this.state.waypoints} 
             toggleIsCreating={() => this.toggleIsCreating()}
+            putRoute={() => this.putRoute()}
           />
         </div>
       );
