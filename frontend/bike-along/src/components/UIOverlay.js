@@ -105,7 +105,7 @@ export default class UIOverlay extends React.Component {
           <NameText>Little Timothy</NameText>
           <StartRouteButton onClick={this.props.toggleIsCreating}>
             { this.props.isCreating && this.props.waypoints.length === 0 && 'Click Map to Add First Waypoint' }
-            { this.props.isCreating && this.props.waypoints.length !== 0 && 'Confirm Route' }
+            { this.props.isCreating && this.props.waypoints.length !== 0 && 'End Route' }
             { !this.props.isCreating && 'Create Route' }
           </StartRouteButton>
           <div className="pulsating-circle" style={pulsatingStyle} />

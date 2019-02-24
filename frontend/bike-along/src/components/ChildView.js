@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import Geolocation from './GeoLocation';
 import PanicButton from './PanicButton';
-import Map from '../components/Map';
-import Axios from 'axios';
 
 class ChildView extends Component {
 
@@ -26,27 +24,14 @@ class ChildView extends Component {
     });
   }
 
-  componentDidMount() {
-    console.log('child mount');
-    Axios.get('/routes')
-    .then(res => {
-      console.log(res);
-    })
-    .catch (err => {
-      console.log(err);
-    })
-  }
-//<PanicButton isPanicking={this.state.isPanicking} updatePanicking={() => this.updatePanicking()} ></PanicButton>
   render() {
     return (
       <>
         <Geolocation latitude={this.state.latitude} longitude={this.state.longitude} isPanicking={this.state.isPanicking} updateCoords={(lat, lng) => this.updateCoords(lat, lng)}></Geolocation>
-        <Map>
-
-        </Map>
+        <PanicButton isPanicking={this.state.isPanicking} updatePanicking={() => this.updatePanicking()} ></PanicButton>
       </>
     );
   }
 }
-;
-export default ChildView
+
+export default ChildView;

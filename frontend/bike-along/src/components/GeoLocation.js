@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 
 class Geolocation extends Component {
   sendCoords() {
-    //console.log("Sending coords")
+    console.log("Sending coords")
     navigator.geolocation.getCurrentPosition(
       (position) => {
         this.props.updateCoords(position.coords.latitude, position.coords.longitude);
-        //console.log('fetching');
+        console.log('fetching');
         fetch('/route/status', {
           method: 'POST',
           headers: {
@@ -42,6 +42,8 @@ class Geolocation extends Component {
   render() {
     return (
       <>
+        <p>Latitude: {this.props.latitude}</p>
+        <p>Longitude: {this.props.longitude}</p>
       </>
     );
   }
