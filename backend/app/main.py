@@ -134,7 +134,7 @@ def get_routes():
 @app.route('/googleroute', methods=['POST'])
 def create_google_route():
     dbsession = db.session()
-    dbsession.query(Routes).delete()
+    dbsession.query(GoogleRoutes).delete()
 
     data = request.get_json().get("data")
     new_google_route = GoogleRoutes(uuid=1, data=data)
@@ -148,7 +148,7 @@ def create_google_route():
 def get_google_route():
     dbsession = db.session()
 
-    route = dbsession.query(GoogleRoutes).first()
+    route = dbsession.query(GoogleRoutes).filter(GoogleRoutes.uuid == 1).first()
     return_object = {"data": route.data}
 
     return make_response(jsonify(return_object)), 200

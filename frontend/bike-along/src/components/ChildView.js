@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Geolocation from './GeoLocation';
 import PanicButton from './PanicButton';
+import ChildUIOverlay from './ChildUIOverlay';
 import Map from '../components/Map';
 import Axios from 'axios';
 
@@ -29,12 +30,15 @@ class ChildView extends Component {
 
   componentDidMount() {
     this.interval = setInterval(() => {
-      console.log('intervasl');
+      //console.log('intervasl');
       Axios.get('/googleroute')
       .then(res => {
         const data = JSON.parse(res.data.data);
-        console.log('SUCCESS');
-        console.log(res);
+        //console.log('SUCCESS');
+        //console.log(data);
+        data['request']['waypoints'] = [];
+        //data['geocoded_waypoints'] = [list[0], list[list.length-1]];
+        //console.log(data);
         this.setState({
           directions: data,
         });
@@ -54,6 +58,10 @@ class ChildView extends Component {
         <Map pushWaypoint={() => {}} directions={this.state.directions}>
 
         </Map>
+        <ChildUIOverlay 
+          updatePanicking={() => this.updatePanicking()}
+          isPanicking={this.state.isPanicking}
+        />
       </>
     );
   }

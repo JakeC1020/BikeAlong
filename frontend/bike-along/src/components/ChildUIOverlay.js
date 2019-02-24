@@ -12,7 +12,7 @@ const Wrapper = styled.div`
 const TopBar = styled.div`
   width: 100%;
   height: 110px;
-  background: #424242;
+  background: ${props => props.isPanicking ? '#B45152' : '#424242'};
   opacity: 0.98;
   &:before {
     content: '';
@@ -96,17 +96,15 @@ const StartRouteButton = styled.button`
   }
 `;
 
-export default class UIOverlay extends React.Component {
+export default class ChildUIOverlay extends React.Component {
   render() {
     return (
       <Wrapper>
-        <TopBar> 
-          <TrackingText>Currently Tracking: </TrackingText>
+        <TopBar isPanicking={this.props.isPanicking}> 
+          <TrackingText>Recording: </TrackingText>
           <NameText>Little Timothy</NameText>
-          <StartRouteButton onClick={this.props.toggleIsCreating}>
-            { this.props.isCreating && this.props.waypoints.length === 0 && 'Click Map to Add First Waypoint' }
-            { this.props.isCreating && this.props.waypoints.length !== 0 && 'Confirm Route' }
-            { !this.props.isCreating && 'Create Route' }
+          <StartRouteButton onClick={this.props.updatePanicking}>
+            Panic!
           </StartRouteButton>
           <div className="pulsating-circle" style={pulsatingStyle} />
         </TopBar>

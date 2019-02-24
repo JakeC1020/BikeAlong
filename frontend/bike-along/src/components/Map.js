@@ -157,12 +157,15 @@ class Map extends React.Component {
       .then(res => {
         //console.log('test');
         //console.log(res);
+        console.log(res.data);
         this.setState({
           currentLoc: {
-            lat: res.latitude,
-            lng: res.longitude,
+            lat: res.data.latitude,
+            lng: res.data.longitude,
           }
         });
+        console.log('panic: ', res.data.isPanicking);
+        this.props.setIsPanicking(res.data.isPanicking);
       })
       .catch(err => {
         console.log('test2')
