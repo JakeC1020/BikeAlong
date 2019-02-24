@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import './App.css';
 
 import Map from './components/Map.js';
-import UIOverlay from './components/UIOverlay.js';
+//import ChildUIOverlay from './components/ChildUIOverlay';
+import ParentUIOverlay from './components/ParentUIOverlay';
 import ChildView from './components/ChildView';
-import { googleMapsKey } from './secrets';
+//import { googleMapsKey } from './secrets';
 import axios from 'axios';
 
 class App extends Component {
@@ -13,21 +14,32 @@ class App extends Component {
     isCreating: false,
     waypoints: [],
     directions: null,
+    isPanicking: false,
+    isOOB: false,
   }
 
   toggleIsCreating() {
-    console.log(this.state.directions.routes[0].overview_path);
+    //console.log(this.state.directions.routes[0].overview_path);
     const path = this.state.directions.routes[0].overview_path;
     const waypoints = path.map(point => ({lat: point.lat(), lng: point.lng()}));
-    console.log('waypoints; ', waypoints);
+    //console.log('waypoints; ', waypoints);
+    //console.log('directions: ', this.state.directions);
     if (this.state.directions) {
-      //fetch
       axios.post('/routes', {
         waypoints,
+      });
+      axios.post('/googleroute', {
+        data: JSON.stringify(this.state.directions),
       });
     }
     this.setState({
       isCreating: !this.state.isCreating,
+    });
+  }
+
+  setIsPanicking(panicking) {
+    this.setState({
+      isPanicking: panicking,
     });
   }
 
@@ -43,15 +55,22 @@ class App extends Component {
     });
   }
 
+  setOOB(oob) {
+    this.setState({
+      isOOB: oob,
+    });
+  }
+
   putRoute() {
     alert('test');
   }
 
   render() {
+    console.log(this.state);
     if (window.location.href.slice(-5) === 'child') {
       return(
         <div className="App" style={{height: '100%'}}>
-          <ChildView></ChildView>
+          <ChildView isOOB={this.state.isOOB} setOOB={(oob) => this.setOOB(oob)}></ChildView>
         </div>
       )
     } 
@@ -63,12 +82,16 @@ class App extends Component {
             waypoints={this.state.waypoints}
             directions={this.state.directions}
             setDirections={directions => this.setDirections(directions)}
+            setIsPanicking={panicking => this.setIsPanicking(panicking)}
+            setOOB={oob => this.setOOB(oob)}
           />
-          <UIOverlay 
+          <ParentUIOverlay 
             isCreating={this.state.isCreating} 
             waypoints={this.state.waypoints} 
             toggleIsCreating={() => this.toggleIsCreating()}
             putRoute={() => this.putRoute()}
+            isPanicking={this.state.isPanicking}
+            isOOB={this.state.isOOB}
           />
         </div>
       );

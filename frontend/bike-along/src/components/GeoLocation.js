@@ -7,6 +7,7 @@ class Geolocation extends Component {
       (position) => {
         this.props.updateCoords(position.coords.latitude, position.coords.longitude);
         //console.log('fetching');
+        console.log('props: ', this.props);
         fetch('/route/status', {
           method: 'POST',
           headers: {
