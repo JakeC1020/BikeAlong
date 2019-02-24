@@ -5,6 +5,7 @@ class Geolocation extends Component {
     //console.log("Sending coords")
     navigator.geolocation.getCurrentPosition(
       (position) => {
+        console.log('POSITION: ', position);
         this.props.updateCoords(position.coords.latitude, position.coords.longitude);
         //console.log('fetching');
         console.log('props: ', this.props);

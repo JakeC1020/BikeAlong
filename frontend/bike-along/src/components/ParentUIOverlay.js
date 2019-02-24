@@ -25,7 +25,7 @@ const TopBar = styled.div`
     position: absolute;
     background: #fff;
     top: -5px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.16);
     opacity: 0.9;
   }
   box-shadow: 0px 0px 51px 0px rgba(0, 0, 0, 0.1), 0px 6px 18px 0px rgba(0, 0, 0, 0.2);
@@ -35,6 +35,7 @@ const TrackingText = styled.div`
   font-size: 22px;
   font-weight: 700;
   color: rgba(255, 255, 255, 0.8);
+  color: #262F3D;
   padding-top: 20px;
   padding-left: 28px;
 `;
@@ -48,6 +49,7 @@ const NameText = styled.div`
   font-size: 32px;
   font-weight: 900;
   color: rgba(255, 255, 255, 0.85);
+  color: #262F3D;
   padding-top: 8px;
   padding-left: 74px;
 `;
@@ -64,9 +66,11 @@ const StartRouteButton = styled.button`
   margin-right: 22px;
   margin-top: 20px;
   border-radius: 6px;
-  border: 1px solid #e1e1e2;
+  border: 1px solid ${props => props.isOOB ? '#262F3D' : 'rgba(255, 255, 255, 0.85)'};
+  border: 1px solid #262F3D;
   cursor: pointer;
-  color: rgba(255, 255, 255, 0.85);
+  color: ${props => props.isOOB || props.isPanicking ? '#262F3D' : 'rgba(255, 255, 255, 0.85)'};
+  color: #262F3D;
   transition: 0.15s ease;
 
   &:before {
@@ -89,7 +93,7 @@ const StartRouteButton = styled.button`
     background: rgba(255, 255, 255, 0.85);
     transform: translateY(-2px);
     box-shadow: 0px 0px 51px 0px rgba(0, 0, 0, 0.1), 0px 6px 18px 0px rgba(0, 0, 0, 0.2);
-    color: #525253;
+    color: #525253s
   }
 
   &:focus {
@@ -100,21 +104,69 @@ const StartRouteButton = styled.button`
   }
 `;
 
+const CenterText = styled.div`
+  width: 100%;
+  text-align: center;
+  font-size: 32px;
+  font-weight: 900;
+  color: ${props => props.isOOB || props.isPanicking ? '#262F3D' : 'rgba(255, 255, 255, 0.85)'};
+  color: #262F3D;
+  padding-top: 18px;
+`;
+
 export default class ChildUIOverlay extends React.Component {
   render() {
+    console.log('blah: ', this.props.isPanicking);
+    console.log(this.props.isPanicking ? 'Undo Panic' : 'Panic!');
     return (
       <Wrapper>
         <TopBar isPanicking={this.props.isPanicking} isOOB={this.props.isOOB}> 
-          <TrackingText>Currently Tracking: </TrackingText>
-          <NameText>Little Timothy</NameText>
-          <StartRouteButton onClick={this.props.toggleIsCreating}>
-            { this.props.isCreating && this.props.waypoints.length === 0 && 'Click Map to Add First Waypoint' }
-            { this.props.isCreating && this.props.waypoints.length !== 0 && 'Confirm Route' }
-            { !this.props.isCreating && 'Create Route' }
-          </StartRouteButton>
-          <div className="pulsating-circle" style={pulsatingStyle} />
+          { !this.props.isPanicking && !this.props.isOOB &&
+            <>
+              <TrackingText>Transmitting: </TrackingText>
+              <NameText>Little Timothy</NameText>
+              <StartRouteButton onClick={this.props.toggleIsCreating}>
+                { this.props.isCreating && this.props.waypoints.length === 0 && 'Click Map to Add First Waypoint' }
+                { this.props.isCreating && this.props.waypoints.length !== 0 && 'Confirm Route' }
+                { !this.props.isCreating && 'Create Route' }
+              </StartRouteButton>
+              <div className="pulsating-circle" style={pulsatingStyle} />
+            </>
+          }
+          {
+            this.props.isPanicking && 
+              <>
+                <CenterText isOOB={this.props.isOOB} isPanicking={this.props.isPanicking}>Sit Tight! Your parents have been alerted!</CenterText>
+              </>
+          }
+          {
+            this.props.isOOB && !this.props.isPanicking &&
+              <>
+                <CenterText isOOB={this.props.isOOB}>Return to route - alerting parents.</CenterText>
+              </>
+          }
         </TopBar>
       </Wrapper>
     );
   }
 }
+
+
+//export default class ChildUIOverlay extends React.Component {
+  //render() {
+    //return (
+      //<Wrapper>
+        //<TopBar isPanicking={this.props.isPanicking} isOOB={this.props.isOOB}> 
+          //<TrackingText>Currently Tracking: </TrackingText>
+          //<NameText>Little Timothy</NameText>
+          //<StartRouteButton onClick={this.props.toggleIsCreating}>
+            //{ this.props.isCreating && this.props.waypoints.length === 0 && 'Click Map to Add First Waypoint' }
+            //{ this.props.isCreating && this.props.waypoints.length !== 0 && 'Confirm Route' }
+            //{ !this.props.isCreating && 'Create Route' }
+          //</StartRouteButton>
+          //<div className="pulsating-circle" style={pulsatingStyle} />
+        //</TopBar>
+      //</Wrapper>
+    //);
+  //}
+//}

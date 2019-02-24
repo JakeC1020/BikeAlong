@@ -303,6 +303,12 @@ class Map extends React.Component {
   }
 
   render() {
+
+    console.log('currentLOC: ', this.state.currentLoc);
+    // eslint-disable-next-line
+    const loc = new google.maps.LatLng(this.state.currentLoc.lat, this.state.currentLoc.lng);
+    console.log('LOC', loc);
+
     return (
       <GoogleMap
         defaultCenter={boulderCoords}
@@ -319,7 +325,7 @@ class Map extends React.Component {
           setOptions={{preserveViewport: true}}
           options={{preserveViewport: true}}
         />
-        <Marker position={boulderCoords} />
+        <Marker position={loc} />
       </GoogleMap>
     )
   }
