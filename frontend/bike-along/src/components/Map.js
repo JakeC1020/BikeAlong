@@ -5,7 +5,6 @@ import {
   withGoogleMap, 
   GoogleMap, 
   Marker,
-  DirectionsRenderer,
 } from 'react-google-maps';
 import axios from 'axios';
 
@@ -151,6 +150,7 @@ class Map extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.waypoints !== this.props.waypoints) {
+      // eslint-disable-next-line
       const DirectionService = new google.maps.DirectionService();
 
     }

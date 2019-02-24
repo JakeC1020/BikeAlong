@@ -26,20 +26,28 @@ class App extends Component {
   }
 
   render() {
-    return (
-      <div className="App" style={{height: '100%'}}>
-        <Map 
-          pushWaypoint={waypoint => this.pushWaypoint(waypoint)} 
-          waypoints={this.state.waypoints}
-        />
-        <UIOverlay 
-          isCreating={this.state.isCreating} 
-          waypoints={this.state.waypoints} 
-          toggleIsCreating={() => this.toggleIsCreating()}
-        />
-        <ChildView></ChildView>
-      </div>
-    );
+    if (window.location.href.slice(-5) === 'child') {
+      return(
+        <div className="App" style={{height: '100%'}}>
+          <ChildView></ChildView>
+        </div>
+      )
+    } 
+    else {
+      return (
+        <div className="App" style={{height: '100%'}}>
+          <Map 
+            pushWaypoint={waypoint => this.pushWaypoint(waypoint)} 
+            waypoints={this.state.waypoints}
+          />
+          <UIOverlay 
+            isCreating={this.state.isCreating} 
+            waypoints={this.state.waypoints} 
+            toggleIsCreating={() => this.toggleIsCreating()}
+          />
+        </div>
+      );
+    }
   }
 }
 
