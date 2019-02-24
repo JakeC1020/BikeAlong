@@ -26,6 +26,7 @@ class RouteStatus(Base):
     uuid = Column('uuid', String(36), primary_key=True)
     latitude = Column('latitude', Float)
     longitude = Column('longitude', Float)
+    isPanicking = Column('isPanicking', Integer)
     timestamp = Column('timestamp', DateTime, default=datetime.datetime.utcnow)
 
 
@@ -52,9 +53,10 @@ def status_post():
     payload = request.get_json()
     latitude = payload.get('latitude')
     longitude = payload.get('longitude')
+    isPanicking = payload.get('isPanicking')
     uuid = uuid4()
 
-    new_status = RouteStatus(uuid=str(uuid), latitude=latitude, longitude=longitude)
+    new_status = RouteStatus(uuid=str(uuid), latitude=latitude, longitude=longitude, isPanicking=isPanicking)
     dbsession.add(new_status)
     dbsession.commit()
 
@@ -69,6 +71,7 @@ def status_get():
     response = {
         "latitude": status.latitude,
         "longitude": status.longitude,
+        "isPanicking": status.isPanicking,
         "timestamp": status.timestamp
     }
 
