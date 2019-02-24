@@ -49,16 +49,51 @@ const NameText = styled.div`
 `;
 
 const StartRouteButton = styled.button`
+  background: transparent;
   position: absolute;
   border: none;
   font-size: 22px;
+  font-weight: 900;
   padding: 22px 32px;
   right: 0;
   top: 0;
   margin-right: 22px;
-  margin-top: 19px;
+  margin-top: 20px;
   border-radius: 6px;
-  background: #662e2e;
+  border: 1px solid #e1e1e2;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.85);
+  transition: 0.15s ease;
+
+  &:before {
+    content: '';
+    width: inherit;
+    height: inherit;
+    width: 100%;
+    height: calc(100% - 4px);
+    position: absolute;
+    border-top-right-radius: 6px;
+    border-top-left-radius: 6px;
+    top: 0px;
+    left: 0;
+    z-index: -1;
+    transition: 0.2s ease;
+    border-radius: 4px;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.85);
+    transform: translateY(-2px);
+    box-shadow: 0px 0px 51px 0px rgba(0, 0, 0, 0.1), 0px 6px 18px 0px rgba(0, 0, 0, 0.2);
+    color: #525253;
+  }
+
+  &:focus {
+    outline: none;
+  }
+  &:active {
+    transform: translateY(-4px);
+  }
 `;
 
 export default class UIOverlay extends React.Component {
@@ -68,7 +103,11 @@ export default class UIOverlay extends React.Component {
         <TopBar> 
           <TrackingText>Currently Tracking: </TrackingText>
           <NameText>Little Timothy</NameText>
-          <StartRouteButton>Create Route</StartRouteButton>
+          <StartRouteButton onClick={this.props.toggleIsCreating}>
+            { this.props.isCreating && this.props.waypoints.length === 0 && 'Click Map to Add First Waypoint' }
+            { this.props.isCreating && this.props.waypoints.length !== 0 && 'End Route' }
+            { !this.props.isCreating && 'Create Route' }
+          </StartRouteButton>
           <div className="pulsating-circle" style={pulsatingStyle} />
         </TopBar>
       </Wrapper>

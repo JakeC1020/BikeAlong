@@ -5,6 +5,7 @@ import {
   withGoogleMap, 
   GoogleMap, 
   Marker,
+  DirectionsRenderer,
 } from 'react-google-maps';
 import axios from 'axios';
 
@@ -148,15 +149,14 @@ class Map extends React.Component {
     //}, 1000);
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.waypoints !== this.props.waypoints) {
+      const DirectionService = new google.maps.DirectionService();
+
+    }
+  }
+
   mapClick(e) {
-    console.log(e);
-    axios.get('/route/status')
-    .then(res => {
-      console.log(res);
-    })
-    .catch(err => {
-      console.log(err);
-    });
   }
 
   render() {
@@ -166,7 +166,7 @@ class Map extends React.Component {
         defaultOptions={defaultOptions}
         defaultZoom={18}
         key={googleMapsKey}
-        onClick={e => this.mapClick(e)}
+        onClick={e => this.props.pushWaypoint({lat: e.latLng.lat(), lng: e.latLng.lng()})}
         style={mapStyle}
       >
         <Marker position={boulderCoords} />
@@ -183,7 +183,7 @@ const ComposedMap = compose(
     mapElement: <div style={{ height: `100%` }} />,
   }),
   withScriptjs,
-  withGoogleMap
+  withGoogleMap,
 )(Map);
 
 export default ComposedMap;
