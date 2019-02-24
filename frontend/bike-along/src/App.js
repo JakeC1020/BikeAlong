@@ -20,10 +20,13 @@ class App extends Component {
     const path = this.state.directions.routes[0].overview_path;
     const waypoints = path.map(point => ({lat: point.lat(), lng: point.lng()}));
     console.log('waypoints; ', waypoints);
+    console.log('directions: ', this.state.directions);
     if (this.state.directions) {
-      //fetch
       axios.post('/routes', {
         waypoints,
+      });
+      axios.post('/googleroute', {
+        data: JSON.stringify(this.state.directions),
       });
     }
     this.setState({

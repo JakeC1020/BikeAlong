@@ -11,6 +11,7 @@ class ChildView extends Component {
     longitude: null,
     isPanicking: false,
     error: null,
+    directions: {},
   };
 
   updateCoords(lat, lon) {
@@ -27,21 +28,30 @@ class ChildView extends Component {
   }
 
   componentDidMount() {
-    console.log('child mount');
-    Axios.get('/routes')
-    .then(res => {
-      console.log(res);
-    })
-    .catch (err => {
-      console.log(err);
-    })
+    this.interval = setInterval(() => {
+      console.log('intervasl');
+      Axios.get('/googleroute')
+      .then(res => {
+        const data = JSON.parse(res.data.data);
+        console.log('SUCCESS');
+        console.log(res);
+        this.setState({
+          directions: data,
+        });
+        clearInterval(this.interval);
+      })
+      .catch (err => {
+        console.log('fail');
+        console.log(err);
+      });
+    }, 1000);
   }
 //<PanicButton isPanicking={this.state.isPanicking} updatePanicking={() => this.updatePanicking()} ></PanicButton>
   render() {
     return (
       <>
         <Geolocation latitude={this.state.latitude} longitude={this.state.longitude} isPanicking={this.state.isPanicking} updateCoords={(lat, lng) => this.updateCoords(lat, lng)}></Geolocation>
-        <Map>
+        <Map pushWaypoint={() => {}} directions={this.state.directions}>
 
         </Map>
       </>
