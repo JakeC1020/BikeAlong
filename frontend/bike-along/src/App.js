@@ -4,6 +4,7 @@ import './App.css';
 import Map from './components/Map.js';
 import UIOverlay from './components/UIOverlay.js';
 import ChildView from './components/ChildView';
+import { googleMapsKey } from './secrets';
 
 class App extends Component {
 
@@ -19,9 +20,8 @@ class App extends Component {
   }
 
   pushWaypoint(waypoint) {
-    console.log(waypoint);
     this.setState({
-      waypoints: new Array(this.state.waypoints.push(waypoint)),
+      waypoints: this.state.waypoints.concat(waypoint),
     });
   }
 

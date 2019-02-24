@@ -26,8 +26,8 @@ const mapStyle = {
 
 const defaultOptions = {
   draggableCursor: 'default',
-  disableDefaultUI: true,
-  gestureHandling: 'none',
+  //disableDefaultUI: true,
+  //gestureHandling: 'none',
   zoomControl: false,
   styles: [
     {
@@ -129,12 +129,18 @@ const defaultOptions = {
 
 class Map extends React.Component {
 
-  state = {
-    currentLoc: boulderCoords,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentLoc: boulderCoords,
+      directions: {},
+    }
+
+    // eslint-disable-next-line
+    this.DirectionsService = new google.maps.DirectionsService();
+  }
 
   componentDidMount() {
-    console.log('mount');
     axios.get('/route/status')
     .then(res => {
       console.log('test')
@@ -151,8 +157,26 @@ class Map extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.waypoints !== this.props.waypoints) {
-      const DirectionService = new google.maps.DirectionService();
+      console.log('update');
+      console.log(this.props.waypoints);
+      const waypoints = this.props.waypoints;
+      const destination = waypoints.length > 1 ? waypoints[waypoints.length-1] : waypoints[0];
 
+      const midWaypoints = waypoints.length > 2 ? waypoints.slice(1, waypoints.length-1).map(waypoint => ({
+        location: waypoint,
+        stopover: true,
+      })) : [];
+      
+      this.DirectionsService.route({
+        origin: waypoints[0],
+        destination,
+        waypoints: midWaypoints,
+        travelMode: 'BICYCLING',
+      }, (res, status) => {
+        this.setState({
+          directions: {...res},
+        });
+      });
     }
   }
 
@@ -165,10 +189,17 @@ class Map extends React.Component {
         defaultCenter={boulderCoords}
         defaultOptions={defaultOptions}
         defaultZoom={18}
+        zoom={18}
         key={googleMapsKey}
-        onClick={e => this.props.pushWaypoint({lat: e.latLng.lat(), lng: e.latLng.lng()})}
+        onClick={e => this.props.pushWaypoint(e.latLng)}
         style={mapStyle}
       >
+        <DirectionsRenderer 
+          directions={this.state.directions} 
+          //preserveViewport={true}
+          setOptions={{preserveViewport: true}}
+          options={{preserveViewport: true, draggable: true}}
+        />
         <Marker position={boulderCoords} />
       </GoogleMap>
     )
