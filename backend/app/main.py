@@ -60,12 +60,14 @@ def status_post():
     latitude = payload.get('latitude')
     longitude = payload.get('longitude')
     isPanicking = payload.get('isPanicking')
+    isOffPath, dist = is_off_path(latitude, longitude)
     uuid = uuid4()
     print(latitude, " ", longitude)
     print(type(latitude))
 
+    print("DISTANCE:", dist)
     new_status = RouteStatus(uuid=str(uuid), latitude=latitude, longitude=longitude,
-                             isPanicking=isPanicking, isOffPath=is_off_path(latitude, longitude))
+                             isPanicking=isPanicking, isOffPath=isOffPath)
     dbsession.add(new_status)
     dbsession.commit()
 
@@ -150,7 +152,7 @@ def create_google_route():
 def get_google_route():
     dbsession = db.session()
 
-    route = dbsession.query(GoogleRoutes).filter(GoogleRoutes.uuid == 1).first()
+    route = dbsession.query(GoogleRoutes).first()
     return_object = {"data": route.data}
 
     return make_response(jsonify(return_object)), 200
@@ -161,19 +163,19 @@ def is_off_path(latitude, longitude):
     EARTH_RADIUS = 6373  # kilometers
     threshold = 100000000000000  # kilometers
 
-    waypoints = dbsession.query(Routes)
+    distances = []
     for waypoint in dbsession.query(Routes):
         delta_lat = waypoint.latitude - latitude
         delta_lng = waypoint.longitude - longitude
         a = sin(delta_lat / 2)**2 + cos(waypoint.latitude) * cos(latitude) * sin(delta_lng / 2)**2
         c = 2 * atan2(sqrt(a), sqrt(1 - a))
         distance = EARTH_RADIUS * c
-        print(distance)
+        distances.append(distance)
 
         if distance < threshold:
-            return False
+            return False, distance
 
-    return True
+    return True, min(distances)
 
 
 if __name__ == '__main__':
