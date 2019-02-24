@@ -118,7 +118,7 @@ def create_routes():
 @app.route('/routes', methods=['GET'])
 def get_routes():
     dbsession = db.session()
-    
+
     return_waypoints = {'waypoints': []}
     for waypoint in dbsession.query(Routes):
         print(waypoint.latitude, waypoint.longitude)
@@ -134,12 +134,6 @@ def is_off_path(latitude, longitude):
     threshold = 1  # kilometers
 
     waypoints = dbsession.query(Routes)
-    if not waypoints:
-        response = {
-            "error": "POST a route first!"
-        }
-        return make_response(jsonify(response)), 400
-
     for waypoint in dbsession.query(Routes):
         delta_lat = waypoint.latitude - latitude
         delta_lng = waypoint.longitude - longitude
