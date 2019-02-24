@@ -38,6 +38,10 @@ class Routes(Base):
     latitude = Column('latitude', Float)
     longitude = Column('longitude', Float)
 
+class GoogleRoutes(Base):
+    __tablename__ = 'google_routes'
+    uuid = Column('uuid', String(32), primary_key=True)
+    data = Column('data', String())
 
 db_engine = db.get_engine()
 Base.metadata.create_all(db_engine)
@@ -126,6 +130,28 @@ def get_routes():
 
     return make_response(jsonify(return_waypoints)), 200
 
+
+@app.route('/googleroute', methods=['POST'])
+def create_google_route():
+    dbsession = db.session()
+    dbsession.query(Routes).delete()
+
+    data = request.get_json().get("data")
+    new_google_route = GoogleRoutes(uuid=1, data=data)
+    dbsession.add(new_google_route)
+
+    dbsession.commit()
+
+    return make_response(), 201
+
+@app.route('/googleroute', methods=['GET'])
+def get_google_route():
+    dbsession = db.session()
+
+    route = dbsession.query(GoogleRoutes).first()
+    return_object = {"data": route.data}
+
+    return make_response(jsonify(return_object)), 200
 
 # Source: https://stackoverflow.com/questions/19412462/getting-distance-between-two-points-based-on-latitude-longitude # noqa
 def is_off_path(latitude, longitude):
