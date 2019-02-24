@@ -52,15 +52,15 @@ class ChildView extends Component {
   }
 //<PanicButton isPanicking={this.state.isPanicking} updatePanicking={() => this.updatePanicking()} ></PanicButton>
   render() {
+    console.log('child props', this.props);
     return (
       <>
         <Geolocation latitude={this.state.latitude} longitude={this.state.longitude} isPanicking={this.state.isPanicking} updateCoords={(lat, lng) => this.updateCoords(lat, lng)}></Geolocation>
-        <Map pushWaypoint={() => {}} directions={this.state.directions}>
-
-        </Map>
+        <Map pushWaypoint={() => {}} directions={this.state.directions} setOOB={this.props.setOOB} />
         <ChildUIOverlay 
           updatePanicking={() => this.updatePanicking()}
           isPanicking={this.state.isPanicking}
+          isOOB={this.props.isOOB}
         />
       </>
     );

@@ -12,7 +12,11 @@ const Wrapper = styled.div`
 const TopBar = styled.div`
   width: 100%;
   height: 110px;
-  background: ${props => props.isPanicking ? '#B45152' : '#424242'};
+  background: ${props => {
+    if (props.isPanicking) return '#B45152';
+    else if (props.isOOB) return '#F6F7EB';
+    else return '#424242';
+  }};
   opacity: 0.98;
   &:before {
     content: '';
@@ -100,7 +104,7 @@ export default class ChildUIOverlay extends React.Component {
   render() {
     return (
       <Wrapper>
-        <TopBar> 
+        <TopBar isPanicking={this.props.isPanicking} isOOB={this.props.isOOB}> 
           <TrackingText>Currently Tracking: </TrackingText>
           <NameText>Little Timothy</NameText>
           <StartRouteButton onClick={this.props.toggleIsCreating}>

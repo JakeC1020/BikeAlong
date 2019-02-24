@@ -15,6 +15,7 @@ class App extends Component {
     waypoints: [],
     directions: null,
     isPanicking: false,
+    isOOB: false,
   }
 
   toggleIsCreating() {
@@ -54,6 +55,12 @@ class App extends Component {
     });
   }
 
+  setOOB(oob) {
+    this.setState({
+      isOOB: oob,
+    });
+  }
+
   putRoute() {
     alert('test');
   }
@@ -63,7 +70,7 @@ class App extends Component {
     if (window.location.href.slice(-5) === 'child') {
       return(
         <div className="App" style={{height: '100%'}}>
-          <ChildView></ChildView>
+          <ChildView isOOB={this.state.isOOB} setOOB={(oob) => this.setOOB(oob)}></ChildView>
         </div>
       )
     } 
@@ -76,6 +83,7 @@ class App extends Component {
             directions={this.state.directions}
             setDirections={directions => this.setDirections(directions)}
             setIsPanicking={panicking => this.setIsPanicking(panicking)}
+            setOOB={oob => this.setOOB(oob)}
           />
           <ParentUIOverlay 
             isCreating={this.state.isCreating} 
@@ -83,6 +91,7 @@ class App extends Component {
             toggleIsCreating={() => this.toggleIsCreating()}
             putRoute={() => this.putRoute()}
             isPanicking={this.state.isPanicking}
+            isOOB={this.state.isOOB}
           />
         </div>
       );

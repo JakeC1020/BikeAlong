@@ -26,7 +26,7 @@ const mapStyle = {
 
 const defaultOptions = {
   draggableCursor: 'default',
-  //disableDefaultUI: true,
+  disableDefaultUI: true,
   //gestureHandling: 'none',
   zoomControl: false,
   styles: [
@@ -164,7 +164,8 @@ class Map extends React.Component {
             lng: res.data.longitude,
           }
         });
-        console.log('panic: ', res.data.isPanicking);
+        console.log('map props: ', this.props);
+        this.props.setOOB(!!res.data.isOffPath);
         this.props.setIsPanicking(res.data.isPanicking);
       })
       .catch(err => {
