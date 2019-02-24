@@ -91,6 +91,7 @@ def create_routes():
     }
     """
     dbsession = db.session()
+    Routes.query.delete()
     waypoints = request.get_json().get("waypoints")
     for i, waypoint in enumerate(waypoints):
         new_route = Routes(

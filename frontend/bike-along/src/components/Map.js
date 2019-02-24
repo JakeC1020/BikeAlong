@@ -5,6 +5,7 @@ import {
   withGoogleMap, 
   GoogleMap, 
   Marker,
+  DirectionsRenderer,
 } from 'react-google-maps';
 import axios from 'axios';
 
@@ -132,7 +133,7 @@ class Map extends React.Component {
     super(props);
     this.state = {
       currentLoc: boulderCoords,
-      directions: {},
+      //directions: {},
     }
 
     // eslint-disable-next-line
@@ -156,11 +157,8 @@ class Map extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.waypoints !== this.props.waypoints) {
-      console.log('update');
-      console.log(this.props.waypoints);
       const waypoints = this.props.waypoints;
       const destination = waypoints.length > 1 ? waypoints[waypoints.length-1] : waypoints[0];
-      const DirectionService = new google.maps.DirectionService();
 
       const midWaypoints = waypoints.length > 2 ? waypoints.slice(1, waypoints.length-1).map(waypoint => ({
         location: waypoint,
@@ -173,9 +171,10 @@ class Map extends React.Component {
         waypoints: midWaypoints,
         travelMode: 'BICYCLING',
       }, (res, status) => {
-        this.setState({
-          directions: {...res},
-        });
+        //this.setState({
+          //directions: {...res},
+        //});
+        this.props.setDirections(res);
       });
     }
   }
@@ -195,7 +194,7 @@ class Map extends React.Component {
         style={mapStyle}
       >
         <DirectionsRenderer 
-          directions={this.state.directions} 
+          directions={this.props.directions} 
           //preserveViewport={true}
           setOptions={{preserveViewport: true}}
           options={{preserveViewport: true, draggable: true}}
