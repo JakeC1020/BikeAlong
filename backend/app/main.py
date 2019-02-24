@@ -101,6 +101,7 @@ def create_routes():
     }
     """
     dbsession = db.session()
+    dbsession.query(Routes).delete()
     waypoints = request.get_json().get("waypoints")
     for i, waypoint in enumerate(waypoints):
         new_route = Routes(
@@ -113,7 +114,6 @@ def create_routes():
     dbsession.commit()
 
     return make_response(), 201
-
 
 @app.route('/routes', methods=['GET'])
 def get_routes():
