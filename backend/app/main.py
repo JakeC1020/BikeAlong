@@ -58,7 +58,7 @@ def status_post():
     dbsession.add(new_status)
     dbsession.commit()
 
-    return make_response(), 200
+    return make_response(), 201
 
 
 @app.route('/route/status', methods=['GET'])
@@ -99,7 +99,7 @@ def create_routes():
 
     dbsession.commit()
 
-    return make_response(), 200
+    return make_response(), 201
 
 
 # Test util
