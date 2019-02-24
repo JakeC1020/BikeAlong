@@ -1,4 +1,5 @@
 import datetime
+from math import sin, cos, sqrt, atan2, radians
 from uuid import uuid4
 
 from flask import Flask, request, jsonify, make_response
@@ -27,6 +28,7 @@ class RouteStatus(Base):
     latitude = Column('latitude', Float)
     longitude = Column('longitude', Float)
     isPanicking = Column('isPanicking', Integer)
+    isOffPath = Column('isOffPath', Integer)
     timestamp = Column('timestamp', DateTime, default=datetime.datetime.utcnow)
 
 
@@ -56,7 +58,8 @@ def status_post():
     isPanicking = payload.get('isPanicking')
     uuid = uuid4()
 
-    new_status = RouteStatus(uuid=str(uuid), latitude=latitude, longitude=longitude, isPanicking=isPanicking)
+    new_status = RouteStatus(uuid=str(uuid), latitude=latitude, longitude=longitude,
+                             isPanicking=isPanicking, isOffPath=is_off_path(latitude, longitude))
     dbsession.add(new_status)
     dbsession.commit()
 
@@ -68,10 +71,17 @@ def status_get():
     dbsession = db.session()
 
     status = dbsession.query(RouteStatus).order_by(desc(RouteStatus.timestamp)).first()
+    if not status:
+        response = {
+            "error": "POST a route first!"
+        }
+        return make_response(jsonify(response)), 400
+
     response = {
         "latitude": status.latitude,
         "longitude": status.longitude,
         "isPanicking": status.isPanicking,
+        "isOffPath": status.isOffPath,
         "timestamp": status.timestamp
     }
 
@@ -116,6 +126,33 @@ def get_routes():
         return_waypoints['waypoints'].append({'lat': waypoint.latitude, 'lon': waypoint.longitude})
 
     return make_response(jsonify(return_waypoints)), 200
+
+
+# Source: https://stackoverflow.com/questions/19412462/getting-distance-between-two-points-based-on-latitude-longitude # noqa
+def is_off_path(latitude, longitude):
+    dbsession = db.session()
+    EARTH_RADIUS = 6373  # kilometers
+    threshold = 1  # kilometers
+
+    waypoints = dbsession.query(Routes)
+    if not waypoints:
+        response = {
+            "error": "POST a route first!"
+        }
+        return make_response(jsonify(response)), 400
+
+    for waypoint in dbsession.query(Routes):
+        delta_lat = waypoint.latitude - latitude
+        delta_lng = waypoint.longitude - longitude
+        a = sin(delta_lat / 2)**2 + cos(waypoint.latitude) * cos(latitude) * sin(delta_lng / 2)**2
+        c = 2 * atan2(sqrt(a), sqrt(1 - a))
+        distance = EARTH_RADIUS * c
+        print(distance)
+
+        if distance < threshold:
+            return False
+
+    return True
 
 
 if __name__ == '__main__':
