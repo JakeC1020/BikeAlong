@@ -4,7 +4,7 @@ from uuid import uuid4
 from flask import Flask, request, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import desc, Column, DateTime, String, Float
+from sqlalchemy import desc, Column, DateTime, String, Float, Integer
 
 
 class DevConfig(object):
@@ -27,6 +27,13 @@ class RouteStatus(Base):
     latitude = Column('latitude', Float)
     longitude = Column('longitude', Float)
     timestamp = Column('timestamp', DateTime, default=datetime.datetime.utcnow)
+
+
+class Routes(Base):
+    __tablename__ = 'routes'
+    uuid = Column('uuid', Integer, primary_key=True)
+    latitude = Column('latitude', Float)
+    longitude = Column('longitude', Float)
 
 
 db_engine = db.get_engine()
@@ -67,6 +74,43 @@ def status_get():
 
     # Logic to get most recent status here
     return make_response(jsonify(response)), 200
+
+
+@app.route('/routes', methods=['POST'])
+def create_routes():
+    """
+    Sample body:
+    {
+        "waypoints": [
+            {"lat": -1.4,  "lon":  80.0},
+            {"lat": -1.4,  "lon":  80.1}
+        ]
+    }
+    """
+    dbsession = db.session()
+    waypoints = request.get_json().get("waypoints")
+    for i, waypoint in enumerate(waypoints):
+        new_route = Routes(
+            uuid=i,
+            latitude=waypoint.get('lat'),
+            longitude=waypoint.get('lng')
+        )
+        dbsession.add(new_route)
+
+    dbsession.commit()
+
+    return make_response(), 200
+
+
+# Test util
+@app.route('/routes', methods=['GET'])
+def get_routes():
+    dbsession = db.session()
+
+    for waypoint in dbsession.query(Routes):
+        print(waypoint.latitude, waypoint.longitude)
+
+    return make_response(), 200
 
 
 if __name__ == '__main__':
