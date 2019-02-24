@@ -61,6 +61,8 @@ def status_post():
     longitude = payload.get('longitude')
     isPanicking = payload.get('isPanicking')
     uuid = uuid4()
+    print(latitude, " ", longitude)
+    print(type(latitude))
 
     new_status = RouteStatus(uuid=str(uuid), latitude=latitude, longitude=longitude,
                              isPanicking=isPanicking, isOffPath=is_off_path(latitude, longitude))
@@ -157,7 +159,7 @@ def get_google_route():
 def is_off_path(latitude, longitude):
     dbsession = db.session()
     EARTH_RADIUS = 6373  # kilometers
-    threshold = 1  # kilometers
+    threshold = 100000000000000  # kilometers
 
     waypoints = dbsession.query(Routes)
     for waypoint in dbsession.query(Routes):
