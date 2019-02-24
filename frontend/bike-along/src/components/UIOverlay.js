@@ -48,6 +48,19 @@ const NameText = styled.div`
   padding-left: 74px;
 `;
 
+const StartRouteButton = styled.button`
+  position: absolute;
+  border: none;
+  font-size: 22px;
+  padding: 22px 32px;
+  right: 0;
+  top: 0;
+  margin-right: 22px;
+  margin-top: 19px;
+  border-radius: 6px;
+  background: #662e2e;
+`;
+
 export default class UIOverlay extends React.Component {
   render() {
     return (
@@ -55,6 +68,7 @@ export default class UIOverlay extends React.Component {
         <TopBar> 
           <TrackingText>Currently Tracking: </TrackingText>
           <NameText>Little Timothy</NameText>
+          <StartRouteButton>Create Route</StartRouteButton>
           <div className="pulsating-circle" style={pulsatingStyle} />
         </TopBar>
       </Wrapper>
