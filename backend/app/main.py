@@ -93,7 +93,7 @@ def create_routes():
         new_route = Routes(
             uuid=i,
             latitude=waypoint.get('lat'),
-            longitude=waypoint.get('lon')
+            longitude=waypoint.get('lng')
         )
         dbsession.add(new_route)
 
