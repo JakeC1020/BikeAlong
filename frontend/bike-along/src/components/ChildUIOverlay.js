@@ -64,9 +64,9 @@ const StartRouteButton = styled.button`
   margin-right: 22px;
   margin-top: 20px;
   border-radius: 6px;
-  border: 1px solid #e1e1e2;
+  border: 1px solid ${props => props.isOOB ? '#262F3D' : 'rgba(255, 255, 255, 0.85)'};
   cursor: pointer;
-  color: rgba(255, 255, 255, 0.85);
+  color: ${props => props.isOOB ? '#262F3D' : 'rgba(255, 255, 255, 0.85)'};
   transition: 0.15s ease;
 
   &:before {
@@ -100,17 +100,50 @@ const StartRouteButton = styled.button`
   }
 `;
 
+const CenterText = styled.div`
+  width: 100%;
+  text-align: center;
+  font-size: 32px;
+  font-weight: 900;
+  color: ${props => props.isOOB ? '#262F3D' : 'rgba(255, 255, 255, 0.85)'};
+  padding-top: 36px;
+`;
+
 export default class ChildUIOverlay extends React.Component {
   render() {
+    console.log('blah: ', this.props.isPanicking);
+    console.log(this.props.isPanicking ? 'Undo Panic' : 'Panic!');
     return (
       <Wrapper>
         <TopBar isPanicking={this.props.isPanicking} isOOB={this.props.isOOB}> 
-          <TrackingText>Recording: </TrackingText>
-          <NameText>Little Timothy</NameText>
-          <StartRouteButton onClick={this.props.updatePanicking}>
-            Panic!
-          </StartRouteButton>
-          <div className="pulsating-circle" style={pulsatingStyle} />
+          { !this.props.isPanicking && !this.props.isOOB &&
+            <>
+              <TrackingText>Recording: </TrackingText>
+              <NameText>Little Timothy</NameText>
+              <StartRouteButton onClick={this.props.updatePanicking}>
+                Panic!
+              </StartRouteButton>
+              <div className="pulsating-circle" style={pulsatingStyle} />
+            </>
+          }
+          {
+            this.props.isPanicking && 
+              <>
+                <CenterText>Your parents have been alerted!</CenterText>
+                <StartRouteButton onClick={this.props.updatePanicking} isOOB={this.props.isOOB}>
+                  Undo Panic
+                </StartRouteButton>
+              </>
+          }
+          {
+            this.props.isOOB && !this.props.isPanicking &&
+              <>
+                <CenterText isOOB={this.props.isOOB}>Return to route - alerting parents.</CenterText>
+                <StartRouteButton onClick={this.props.updatePanicking} isOOB={this.props.isOOB}>
+                  Panic!
+                </StartRouteButton>
+              </>
+          }
         </TopBar>
       </Wrapper>
     );
