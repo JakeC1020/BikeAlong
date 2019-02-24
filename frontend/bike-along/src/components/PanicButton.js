@@ -4,7 +4,7 @@ class PanicButton extends Component {
 
   render() {
     return (
-      <button onClick={ () => this.props.updatePanicking() }>{this.props.isPanicking}</button>
+      <button onClick={ () => this.props.updatePanicking() }>Panic{this.props.isPanicking}</button>
     );
   }
 }
