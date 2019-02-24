@@ -1,6 +1,17 @@
 version: '2'
-
 services:
+  frontend:
+    build: ./frontend/
+    ports:
+      - 0.0.0.0:3000:3000
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./frontend/bike-along:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - api
+
   api:
     build: ./backend/
     ports:

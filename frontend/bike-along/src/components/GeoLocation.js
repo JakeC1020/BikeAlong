@@ -1,26 +1,15 @@
 import React, { Component } from 'react';
 
 class Geolocation extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      error: null,
-    };
-  }
-
   sendCoords() {
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        this.setState({
-          error: null,
-        });
         this.props.updateCoords(position.coords.latitude, position.coords.longitude);
         console.log('fetching');
         fetch('http://ASDF/route/status', {
           method: 'POST',
           headers: {
-            //Accept: 'application/json',
+            Accept: 'application/json',
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
@@ -36,7 +25,7 @@ class Geolocation extends Component {
           console.log("Error:" + error);
         });
       },
-      (error) => this.setState({ error: error.message }),
+      (error) => console.log(error),
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
     );
   }
@@ -52,8 +41,8 @@ class Geolocation extends Component {
   render() {
     return (
       <>
-        <Text>Latitude: {this.props.latitude}</Text>
-        <Text>Longitude: {this.props.longitude}</Text>
+        <p>Latitude: {this.props.latitude}</p>
+        <p>Longitude: {this.props.longitude}</p>
       </>
     );
   }
