@@ -95,8 +95,8 @@ def create_routes():
     Sample body:
     {
         "waypoints": [
-            {"lat": -1.4,  "lon":  80.0},
-            {"lat": -1.4,  "lon":  80.1}
+            {"lat": -1.4,  "lng":  80.0},
+            {"lat": -1.4,  "lng":  80.1}
         ]
     }
     """
@@ -115,15 +115,16 @@ def create_routes():
     return make_response(), 201
 
 
-# Test util
 @app.route('/routes', methods=['GET'])
 def get_routes():
     dbsession = db.session()
-
+    
+    return_waypoints = {'waypoints': []}
     for waypoint in dbsession.query(Routes):
         print(waypoint.latitude, waypoint.longitude)
+        return_waypoints['waypoints'].append({'lat': waypoint.latitude, 'lon': waypoint.longitude})
 
-    return make_response(), 200
+    return make_response(jsonify(return_waypoints)), 200
 
 
 # Source: https://stackoverflow.com/questions/19412462/getting-distance-between-two-points-based-on-latitude-longitude # noqa
