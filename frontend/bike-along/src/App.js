@@ -20,11 +20,12 @@ class App extends Component {
 
   toggleIsCreating() {
     //console.log(this.state.directions.routes[0].overview_path);
-    const path = this.state.directions.routes[0].overview_path;
-    const waypoints = path.map(point => ({lat: point.lat(), lng: point.lng()}));
     //console.log('waypoints; ', waypoints);
     //console.log('directions: ', this.state.directions);
-    if (this.state.directions) {
+    if (this.state.waypoints.length > 1) {
+      console.log('pnts: ', this.state.waypoints);
+      const path = this.state.directions.routes[0].overview_path;
+      const waypoints = path.map(point => ({lat: point.lat(), lng: point.lng()}));
       axios.post('/routes', {
         waypoints,
       });
@@ -32,9 +33,11 @@ class App extends Component {
         data: JSON.stringify(this.state.directions),
       });
     }
-    this.setState({
-      isCreating: !this.state.isCreating,
-    });
+    if(this.state.isCreating || (!this.state.isCreating && this.state.waypoints.length < 2)) {
+      this.setState({
+        isCreating: !this.state.isCreating,
+      });
+    }
   }
 
   setIsPanicking(panicking) {

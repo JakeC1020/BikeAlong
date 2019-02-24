@@ -11,7 +11,7 @@ const Wrapper = styled.div`
 
 const TopBar = styled.div`
   width: 100%;
-  height: 110px;
+  height: 170px;
   background: ${props => {
     if (props.isPanicking) return '#F3A4A0';
     else if (props.isOOB) return '#F7C24B';
@@ -57,12 +57,16 @@ const NameText = styled.div`
 const StartRouteButton = styled.button`
   background: transparent;
   position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  //top: 0;
+  left: 50%;
+  //margin-left: calc(-58px);
+  transform: translateX(-50%);
   border: none;
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 900;
-  padding: 22px 32px;
-  right: 0;
-  top: 0;
+  padding: 8px 26px;
   margin-right: 22px;
   margin-top: 20px;
   border-radius: 6px;
@@ -91,7 +95,7 @@ const StartRouteButton = styled.button`
 
   &:hover {
     background: rgba(255, 255, 255, 0.85);
-    transform: translateY(-2px);
+    transform: translateY(-2px) translateX(-50%);
     box-shadow: 0px 0px 51px 0px rgba(0, 0, 0, 0.1), 0px 6px 18px 0px rgba(0, 0, 0, 0.2);
     color: #525253s
   }
@@ -100,18 +104,20 @@ const StartRouteButton = styled.button`
     outline: none;
   }
   &:active {
-    transform: translateY(-4px);
+    transform: translateY(-4px) translateX(-50%);
   }
 `;
 
 const CenterText = styled.div`
   width: 100%;
   text-align: center;
-  font-size: 32px;
+  font-size: 26px;
+  padding-left: 8px;
+  padding-roght: 8px;
   font-weight: 900;
   color: ${props => props.isOOB || props.isPanicking ? '#262F3D' : 'rgba(255, 255, 255, 0.85)'};
   color: #262F3D;
-  padding-top: 36px;
+  padding-top: 26px;
 `;
 
 export default class ChildUIOverlay extends React.Component {

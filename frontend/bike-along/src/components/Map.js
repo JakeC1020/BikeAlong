@@ -307,7 +307,7 @@ class Map extends React.Component {
     console.log('currentLOC: ', this.state.currentLoc);
     // eslint-disable-next-line
     const loc = new google.maps.LatLng(this.state.currentLoc.lat, this.state.currentLoc.lng);
-    console.log('LOC', loc);
+    console.log('LOC', this.state.currentLoc);
 
     return (
       <GoogleMap
@@ -325,7 +325,7 @@ class Map extends React.Component {
           setOptions={{preserveViewport: true}}
           options={{preserveViewport: true}}
         />
-        <Marker position={loc} />
+        <Marker position={this.state.currentLoc} />
       </GoogleMap>
     )
   }

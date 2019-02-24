@@ -25,7 +25,7 @@ const TopBar = styled.div`
     position: absolute;
     background: #fff;
     top: -5px;
-    background: rgba(255, 255, 255, 0.16);
+    background: rgba(255, 255, 255, 0.18);
     opacity: 0.9;
   }
   box-shadow: 0px 0px 51px 0px rgba(0, 0, 0, 0.1), 0px 6px 18px 0px rgba(0, 0, 0, 0.2);
@@ -88,19 +88,24 @@ const StartRouteButton = styled.button`
     transition: 0.2s ease;
     border-radius: 4px;
   }
+  cursor: default;
 
-  &:hover {
-    background: rgba(255, 255, 255, 0.85);
-    transform: translateY(-2px);
-    box-shadow: 0px 0px 51px 0px rgba(0, 0, 0, 0.1), 0px 6px 18px 0px rgba(0, 0, 0, 0.2);
-    color: #525253s
+  ${props => ((props.len === 0 && !props.isCreating) || (props.len > 1 && props.isCreating)) && 
+    `
+    &:hover {
+      background: rgba(255, 255, 255, 0.85);
+      transform: translateY(-2px);
+      box-shadow: 0px 0px 51px 0px rgba(0, 0, 0, 0.1), 0px 6px 18px 0px rgba(0, 0, 0, 0.2);
+      color: #525253s
+    }
+    &:active {
+      transform: translateY(-4px);
+    }
+    cursor: pointer;
+    `
   }
-
   &:focus {
     outline: none;
-  }
-  &:active {
-    transform: translateY(-4px);
   }
 `;
 
@@ -111,24 +116,28 @@ const CenterText = styled.div`
   font-weight: 900;
   color: ${props => props.isOOB || props.isPanicking ? '#262F3D' : 'rgba(255, 255, 255, 0.85)'};
   color: #262F3D;
-  padding-top: 18px;
+  padding-top: ${props => {
+    if (props.isPanicking) return '34px';
+    if (props.isOOB) return '18px';
+  }};
 `;
 
 export default class ChildUIOverlay extends React.Component {
   render() {
-    console.log('blah: ', this.props.isPanicking);
-    console.log(this.props.isPanicking ? 'Undo Panic' : 'Panic!');
+    //console.log('blah: ', this.props.isPanicking);
+    //console.log(this.props.isPanicking ? 'Undo Panic' : 'Panic!');
     return (
       <Wrapper>
         <TopBar isPanicking={this.props.isPanicking} isOOB={this.props.isOOB}> 
           { !this.props.isPanicking && !this.props.isOOB &&
             <>
-              <TrackingText>Transmitting: </TrackingText>
+              <TrackingText>Connected to: </TrackingText>
               <NameText>Little Timothy</NameText>
-              <StartRouteButton onClick={this.props.toggleIsCreating}>
-                { this.props.isCreating && this.props.waypoints.length === 0 && 'Click Map to Add First Waypoint' }
-                { this.props.isCreating && this.props.waypoints.length !== 0 && 'Confirm Route' }
-                { !this.props.isCreating && 'Create Route' }
+              <StartRouteButton onClick={this.props.toggleIsCreating} isCreating={this.props.isCreating} len={this.props.waypoints.length}>
+                { this.props.isCreating && this.props.waypoints.length < 2 && 'Click Map to Add A Waypoint ...' }
+                { this.props.isCreating && this.props.waypoints.length > 1 && 'Confirm Route' }
+                { !this.props.isCreating && this.props.waypoints.length < 2 && 'Create Route' }
+                { !this.props.isCreating && this.props.waypoints.length > 1 && 'Route Sent!' }
               </StartRouteButton>
               <div className="pulsating-circle" style={pulsatingStyle} />
             </>
@@ -136,13 +145,13 @@ export default class ChildUIOverlay extends React.Component {
           {
             this.props.isPanicking && 
               <>
-                <CenterText isOOB={this.props.isOOB} isPanicking={this.props.isPanicking}>Sit Tight! Your parents have been alerted!</CenterText>
+                <CenterText isOOB={this.props.isOOB} isPanicking={this.props.isPanicking}>ALERT! Little Timothy has pressed the PANIC button!</CenterText>
               </>
           }
           {
             this.props.isOOB && !this.props.isPanicking &&
               <>
-                <CenterText isOOB={this.props.isOOB}>Return to route - alerting parents.</CenterText>
+                <CenterText isOOB={this.props.isOOB} isPanicking={this.props.isPanicking}>Little Timothy is out of bounds!</CenterText>
               </>
           }
         </TopBar>
