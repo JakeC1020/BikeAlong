@@ -132,7 +132,7 @@ class Map extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentLoc: boulderCoords,
+      currentLoc: {},
       //directions: {},
     }
 
@@ -141,18 +141,35 @@ class Map extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('/route/status')
-    .then(res => {
-      console.log('test')
-      console.log(res);
-    })
-    .catch(err => {
-      console.log('test2')
-      console.log(err);
-    });
+    //axios.get('/route/status')
+    //.then(res => {
+      //console.log('test')
+      //console.log(res);
+    //})
+    //.catch(err => {
+      //console.log('test2')
+      //console.log(err);
+    //});
 
-    //setInterval(() => {
-    //}, 1000);
+    setInterval(() => {
+      //console.log('heartbeat');
+      axios.get('/route/status')
+      .then(res => {
+        //console.log('test');
+        //console.log(res);
+        this.setState({
+          currentLoc: {
+            lat: res.latitude,
+            lng: res.longitude,
+          }
+        });
+      })
+      .catch(err => {
+        console.log('test2')
+        console.log(err);
+      });
+
+    }, 1000);
   }
 
   componentDidUpdate(prevProps) {
@@ -197,7 +214,7 @@ class Map extends React.Component {
           directions={this.props.directions} 
           //preserveViewport={true}
           setOptions={{preserveViewport: true}}
-          options={{preserveViewport: true, draggable: true}}
+          options={{preserveViewport: true}}
         />
         <Marker position={boulderCoords} />
       </GoogleMap>

@@ -12,13 +12,19 @@ class App extends Component {
   state = {
     isCreating: false,
     waypoints: [],
-    directions: [],
+    directions: null,
   }
 
   toggleIsCreating() {
-    if (this.state.directions.length > 0) {
+    console.log(this.state.directions.routes[0].overview_path);
+    const path = this.state.directions.routes[0].overview_path;
+    const waypoints = path.map(point => ({lat: point.lat(), lng: point.lng()}));
+    console.log('waypoints; ', waypoints);
+    if (this.state.directions) {
       //fetch
-      //axios.post()
+      axios.post('/routes', {
+        waypoints,
+      });
     }
     this.setState({
       isCreating: !this.state.isCreating,
@@ -55,6 +61,7 @@ class App extends Component {
           <Map 
             pushWaypoint={waypoint => this.pushWaypoint(waypoint)} 
             waypoints={this.state.waypoints}
+            directions={this.state.directions}
             setDirections={directions => this.setDirections(directions)}
           />
           <UIOverlay 

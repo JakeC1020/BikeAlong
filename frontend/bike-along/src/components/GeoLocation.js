@@ -42,8 +42,6 @@ class Geolocation extends Component {
   render() {
     return (
       <>
-        <p>Latitude: {this.props.latitude}</p>
-        <p>Longitude: {this.props.longitude}</p>
       </>
     );
   }
