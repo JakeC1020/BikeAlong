@@ -26,5 +26,5 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  "proxy": "http://18.216.184.62:8080/"
+  "proxy": "http://api:8080/"
 }

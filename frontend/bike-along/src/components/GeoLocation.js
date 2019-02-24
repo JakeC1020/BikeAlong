@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 
 class Geolocation extends Component {
   sendCoords() {
+    console.log("Sending coords")
     navigator.geolocation.getCurrentPosition(
       (position) => {
         this.props.updateCoords(position.coords.latitude, position.coords.longitude);
         console.log('fetching');
-        fetch('http://ASDF/route/status', {
+        fetch('/route/status', {
           method: 'POST',
           headers: {
             Accept: 'application/json',
